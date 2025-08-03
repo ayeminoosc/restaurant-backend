@@ -1,9 +1,17 @@
 package com.acf.pos.restaurant.backend.config;
 
-import com.acf.pos.restaurant.backend.entity.*;
+import com.acf.pos.restaurant.backend.entity.RefreshToken;
+import com.acf.pos.restaurant.backend.entity.Organization;
+import com.acf.pos.restaurant.backend.entity.Restaurant;
+import com.acf.pos.restaurant.backend.entity.Subscription;
+import com.acf.pos.restaurant.backend.entity.User;
+import com.acf.pos.restaurant.backend.entity.UserType;
+import com.acf.pos.restaurant.backend.entity.Shift;
+import com.acf.pos.restaurant.backend.entity.Terminal;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
+import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +38,10 @@ public class Config {
         return new JdbcConnectionSource(databaseUrl);
     }
 
+    @Bean
+    public TransactionManager transactionManager(ConnectionSource connectionSource) throws SQLException {
+        return new TransactionManager(connectionSource());
+    }
     @Bean
     public Dao<RefreshToken, String> refreshTokenDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, RefreshToken.class);

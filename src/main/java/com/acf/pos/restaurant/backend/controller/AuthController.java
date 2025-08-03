@@ -1,14 +1,10 @@
 package com.acf.pos.restaurant.backend.controller;
 
-import com.acf.pos.restaurant.backend.pojo.AuthRequest;
-import com.acf.pos.restaurant.backend.pojo.AuthResponse;
-import com.acf.pos.restaurant.backend.pojo.RefreshRequest;
-import com.acf.pos.restaurant.backend.pojo.RegistrationRequest;
+import com.acf.pos.restaurant.backend.pojo.*;
 import com.acf.pos.restaurant.backend.security.JwtUtil;
 import com.acf.pos.restaurant.backend.service.RefreshTokenService;
 import com.acf.pos.restaurant.backend.service.RegistrationService;
 import com.acf.pos.restaurant.backend.service.UserService;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -66,9 +62,9 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refresh(@RequestBody RefreshRequest request) throws SQLException {
-        String username = refreshTokenService.verify(request.getRefreshToken());
-        String newAccessToken = jwtUtil.generateToken(username, 15 * 60 * 1000);
-        return ResponseEntity.ok(new AuthResponse(newAccessToken, request.getRefreshToken()));
+        RotatedTokenResponse rotatedToken = refreshTokenService.verifyAndRotate(request.getRefreshToken());
+        String newAccessToken = jwtUtil.generateToken(rotatedToken.getUserId(), expirationTimeInMinutes * 60 * 1000);
+        return ResponseEntity.ok(new AuthResponse(newAccessToken, rotatedToken.getNewRefreshToken()));
     }
 
     @PostMapping("/logout")
