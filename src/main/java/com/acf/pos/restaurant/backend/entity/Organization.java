@@ -7,14 +7,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@DatabaseTable(tableName = "user_type")
+@DatabaseTable(tableName = "organization")
 @Data
-public class UserType extends BaseEntity {
+public class Organization extends BaseEntity {
     
 
-    @DatabaseField(columnName = "p_name")
+    @DatabaseField(canBeNull = false, unique = true)
     private String name;
-
-    @DatabaseField(foreign = true, columnName = "restaurant_id")
-    private Restaurant restaurant;
 }

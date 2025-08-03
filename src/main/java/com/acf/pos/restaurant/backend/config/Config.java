@@ -1,6 +1,6 @@
 package com.acf.pos.restaurant.backend.config;
 
-import com.acf.pos.restaurant.backend.entity.RefreshToken;
+import com.acf.pos.restaurant.backend.entity.*;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -29,29 +29,45 @@ public class Config {
         }
         return new JdbcConnectionSource(databaseUrl);
     }
+
     @Bean
     public Dao<RefreshToken, String> refreshTokenDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, RefreshToken.class);
     }
 
     @Bean
-    public Dao<User, Integer> userDao(ConnectionSource connectionSource) throws SQLException {
+    public Dao<User, String> userDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, User.class);
     }
 
     @Bean
-    public Dao<UserType, Integer> userTypeDao(ConnectionSource connectionSource) throws SQLException {
+    public Dao<UserType, String> userTypeDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, UserType.class);
     }
 
     @Bean
-    public Dao<Shift, Integer> shiftDao(ConnectionSource connectionSource) throws SQLException {
+    public Dao<Shift, String> shiftDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, Shift.class);
     }
 
     @Bean
-    public Dao<Terminal, Integer> terminalDao(ConnectionSource connectionSource) throws SQLException {
+    public Dao<Terminal, String> terminalDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, Terminal.class);
+    }
+
+    @Bean
+    public Dao<Organization, String> organizationDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Organization.class);
+    }
+
+    @Bean
+    public Dao<Subscription, String> subscriptionDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Subscription.class);
+    }
+
+    @Bean
+    public Dao<Restaurant, String> restaurantDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Restaurant.class);
     }
 
 }

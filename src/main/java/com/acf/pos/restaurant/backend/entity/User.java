@@ -3,18 +3,23 @@ package com.acf.pos.restaurant.backend.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
-@DatabaseTable(tableName = "users")
+@EqualsAndHashCode(callSuper = true)
+@DatabaseTable(tableName = "user")
 @Data
-public class User {
+public class User extends BaseEntity {
 
-    @DatabaseField(generatedId = true, columnName = "auto_id")
-    private Integer autoId;
+    @DatabaseField(foreign = true, foreignAutoRefresh = true, canBeNull = false, columnName = "organization_id")
+    private Organization organization;
 
-    @DatabaseField(unique = true, columnName = "user_id")
-    private Integer userId;
+    @DatabaseField(foreign = true, columnName = "restaurant_id")
+    private Restaurant restaurant;
+
+    @DatabaseField(columnName = "is_owner")
+    private boolean isOwner;
 
     @DatabaseField(canBeNull = false, columnName = "user_pass")
     private String password;
@@ -25,8 +30,11 @@ public class User {
     @DatabaseField(columnName = "last_name")
     private String lastName;
 
-    @DatabaseField
+    @DatabaseField(columnName = "ssn")
     private String ssn;
+
+    @DatabaseField(columnName = "email", unique = true, canBeNull = true)
+    private String email;
 
     @DatabaseField(columnName = "cost_per_hour")
     private Double costPerHour;
@@ -43,13 +51,7 @@ public class User {
     @DatabaseField(columnName = "phone_no")
     private String phoneNo;
 
-    @DatabaseField(columnName = "is_driver")
-    private boolean isDriver;
-
-    @DatabaseField(columnName = "available_for_delivery")
-    private boolean availableForDelivery;
-
-    @DatabaseField
+    @DatabaseField(columnName = "active")
     private boolean active;
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "shift_id")

@@ -3,8 +3,11 @@ package com.acf.pos.restaurant.backend.controller;
 import com.acf.pos.restaurant.backend.pojo.AuthRequest;
 import com.acf.pos.restaurant.backend.pojo.AuthResponse;
 import com.acf.pos.restaurant.backend.pojo.RefreshRequest;
+import com.acf.pos.restaurant.backend.pojo.RegistrationRequest;
 import com.acf.pos.restaurant.backend.security.JwtUtil;
 import com.acf.pos.restaurant.backend.service.RefreshTokenService;
+import com.acf.pos.restaurant.backend.service.RegistrationService;
+import com.acf.pos.restaurant.backend.service.UserService;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,17 +34,33 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RegistrationService registrationService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegistrationRequest request) {
+        try {
+            registrationService.register(request);
+            return ResponseEntity.ok("Registration successful");
+        } catch (SQLException e) {
+            return ResponseEntity.status(500).body("Registration failed: " + e.getMessage());
+        }
+    }
+
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request) throws SQLException {
-        String username = request.getUsername();
+        String email = request.getEmail();
+        String phoneNumber = request.getPhoneNumber();
         String password = request.getPassword();
 
-        if (!userService.validateCredentials(username, password)) {
+        if (!userService.validateCredentials(email, phoneNumber, password)) {
             return ResponseEntity.status(401).body("Invalid username or password");
         }
 
-        String accessToken = jwtUtil.generateToken(username, expirationTimeInMinutes * 60 * 1000);
-        String refreshToken = refreshTokenService.create(username);
+        String subject = email != null ? email : phoneNumber;
+
+        String accessToken = jwtUtil.generateToken(subject, expirationTimeInMinutes * 60 * 1000);
+        String refreshToken = refreshTokenService.create(subject);
         return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
     }
 

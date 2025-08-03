@@ -4,13 +4,15 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import lombok.Data;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
 @DatabaseTable(tableName = "terminal")
 @Data
-public class Terminal {
-    @DatabaseField(id = true)
-    private Integer id;
+public class Terminal extends BaseEntity {
+    
 
-    @DatabaseField
+    @DatabaseField(columnName = "name")
     private String name;
 
     @DatabaseField(columnName = "terminal_key")
@@ -28,10 +30,10 @@ public class Terminal {
     @DatabaseField(columnName = "in_use")
     private boolean inUse;
 
-    @DatabaseField
+    @DatabaseField(columnName = "active")
     private boolean active;
 
-    @DatabaseField
+    @DatabaseField(columnName = "location")
     private String location;
 
     @DatabaseField(columnName = "floor_id")
@@ -39,4 +41,7 @@ public class Terminal {
 
     @DatabaseField(foreign = true, foreignAutoRefresh = true, columnName = "assigned_user")
     private User assignedUser;
+
+    @DatabaseField(foreign = true, columnName = "restaurant_id")
+    private Restaurant restaurant;
 }

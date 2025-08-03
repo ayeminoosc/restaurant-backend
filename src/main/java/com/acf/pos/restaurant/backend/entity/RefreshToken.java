@@ -3,37 +3,37 @@ package com.acf.pos.restaurant.backend.entity;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @DatabaseTable(tableName = "refresh_token")
 @Data
-public class RefreshToken {
-    @DatabaseField(id = true)
-    private String id;
+public class RefreshToken extends BaseEntity {
+    
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "user_id")
     private String userId;
 
-    @DatabaseField
+    @DatabaseField(columnName = "device_name")
     private String deviceName;
 
-    @DatabaseField
+    @DatabaseField(columnName = "ip_address")
     private String ipAddress;
 
-    @DatabaseField
+    @DatabaseField(columnName = "user_agent")
     private String userAgent;
 
-    @DatabaseField(canBeNull = false)
-    private Date createdAt;
+    
 
-    @DatabaseField(canBeNull = false)
+    @DatabaseField(canBeNull = false, columnName = "expires_at")
     private Date expiresAt;
 
     @DatabaseField
     private boolean revoked;
 
-    @DatabaseField
+    @DatabaseField(columnName = "last_used_at")
     private Date lastUsedAt;
 
     @DatabaseField

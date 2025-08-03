@@ -3,6 +3,7 @@ package com.acf.pos.restaurant.backend.service;
 import com.acf.pos.restaurant.backend.entity.RefreshToken;
 import com.j256.ormlite.dao.Dao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -13,13 +14,16 @@ public class RefreshTokenService {
     @Autowired
     Dao<RefreshToken, String> refreshTokenDao;
 
-    public String create(String userId) throws SQLException {
+    @Value("${jwt.refresh.expiration.days:7}")
+    private long expirationTimeInDays;
+
+    public String create(String subject) throws SQLException {
         String token = UUID.randomUUID().toString();
         RefreshToken rt = new RefreshToken();
         rt.setId(token);
-        rt.setUserId(userId);
+        rt.setUserId(subject);
         rt.setCreatedAt(new Date());
-        rt.setExpiresAt(new Date(System.currentTimeMillis() + 7L * 86400000)); // 7 days
+        rt.setExpiresAt(new Date(System.currentTimeMillis() + expirationTimeInDays * 24 * 60 * 60 * 1000));
         rt.setRevoked(false);
         refreshTokenDao.create(rt);
         return token;
