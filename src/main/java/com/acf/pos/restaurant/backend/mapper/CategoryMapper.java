@@ -43,7 +43,6 @@ public class CategoryMapper {
         category.setActive(request.getIsActive() != null ? request.getIsActive() : true);
         category.setColorCode(request.getColorCode());
         category.setIconUrl(request.getIconUrl());
-        category.setTaxApplicable(request.getTaxApplicable() != null ? request.getTaxApplicable() : true);
 
         return category;
     }
@@ -74,10 +73,6 @@ public class CategoryMapper {
         category.setColorCode(request.getColorCode());
         category.setIconUrl(request.getIconUrl());
         
-        if (request.getTaxApplicable() != null) {
-            category.setTaxApplicable(request.getTaxApplicable());
-        }
-        
     }
 
     public CategoryResponse toResponse(Category category) {
@@ -96,8 +91,6 @@ public class CategoryMapper {
         response.setIsActive(category.isActive());
         response.setColorCode(category.getColorCode());
         response.setIconUrl(category.getIconUrl());
-        response.setTaxApplicable(category.isTaxApplicable());
-
         // Convert Date to LocalDateTime
         if (category.getCreatedAt() != null) {
             response.setCreatedAt(LocalDateTime.ofInstant(

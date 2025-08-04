@@ -2,11 +2,13 @@ package com.acf.pos.restaurant.backend.entity;
 
 import com.j256.ormlite.field.DatabaseField;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Data
+@EqualsAndHashCode
 public abstract class BaseEntity {
 
     @DatabaseField(id = true, canBeNull = false)

@@ -9,7 +9,7 @@ import lombok.Data;
 public class RestaurantUpdateRequest {
 
     @JsonProperty("unique_id")
-    private Integer uniqueId;
+    private String uniqueId;
 
     private String name;
 

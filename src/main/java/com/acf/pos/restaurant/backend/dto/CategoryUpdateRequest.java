@@ -17,7 +17,6 @@ public class CategoryUpdateRequest {
     private Boolean isActive;
     private String colorCode;
     private String iconUrl;
-    private Boolean taxApplicable;
     private String kitchenDisplayName;
 
     // Constructors
@@ -101,14 +100,6 @@ public class CategoryUpdateRequest {
 
     public void setIconUrl(String iconUrl) {
         this.iconUrl = iconUrl;
-    }
-
-    public Boolean getTaxApplicable() {
-        return taxApplicable;
-    }
-
-    public void setTaxApplicable(Boolean taxApplicable) {
-        this.taxApplicable = taxApplicable;
     }
 
     public String getKitchenDisplayName() {

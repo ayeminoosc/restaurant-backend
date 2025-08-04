@@ -11,8 +11,23 @@ import com.acf.pos.restaurant.backend.entity.Terminal;
 import com.acf.pos.restaurant.backend.entity.Category;
 import com.acf.pos.restaurant.backend.entity.FloorPlan;
 import com.acf.pos.restaurant.backend.entity.RestaurantTable;
+import com.acf.pos.restaurant.backend.entity.MenuItem;
+import com.acf.pos.restaurant.backend.entity.ModifierGroup;
+import com.acf.pos.restaurant.backend.entity.Modifier;
+import com.acf.pos.restaurant.backend.entity.Prefix;
+import com.acf.pos.restaurant.backend.entity.MenuItemModifierGroup;
 import com.acf.pos.restaurant.backend.service.CategoryService;
+import com.acf.pos.restaurant.backend.service.RestaurantService;
+import com.acf.pos.restaurant.backend.service.MenuItemService;
+import com.acf.pos.restaurant.backend.service.ModifierGroupService;
+import com.acf.pos.restaurant.backend.service.ModifierService;
+import com.acf.pos.restaurant.backend.service.PrefixService;
 import com.acf.pos.restaurant.backend.mapper.CategoryMapper;
+import com.acf.pos.restaurant.backend.mapper.RestaurantMapper;
+import com.acf.pos.restaurant.backend.mapper.MenuItemMapper;
+import com.acf.pos.restaurant.backend.mapper.ModifierGroupMapper;
+import com.acf.pos.restaurant.backend.mapper.ModifierMapper;
+import com.acf.pos.restaurant.backend.mapper.PrefixMapper;
 import com.acf.pos.restaurant.backend.common.TransactionManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
@@ -104,8 +119,58 @@ public class Config {
     }
 
     @Bean
+    public Dao<MenuItem, String> menuItemDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, MenuItem.class);
+    }
+
+    @Bean
+    public Dao<ModifierGroup, String> modifierGroupDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, ModifierGroup.class);
+    }
+
+    @Bean
+    public Dao<Modifier, String> modifierDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Modifier.class);
+    }
+
+    @Bean
+    public Dao<Prefix, String> prefixDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Prefix.class);
+    }
+
+    @Bean
+    public Dao<MenuItemModifierGroup, String> menuItemModifierGroupDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, MenuItemModifierGroup.class);
+    }
+
+    @Bean
     public CategoryMapper categoryMapper() {
         return new CategoryMapper();
+    }
+
+    @Bean
+    public RestaurantMapper restaurantMapper() {
+        return new RestaurantMapper();
+    }
+
+    @Bean
+    public PrefixMapper prefixMapper() {
+        return new PrefixMapper();
+    }
+
+    @Bean
+    public ModifierMapper modifierMapper(PrefixMapper prefixMapper) {
+        return new ModifierMapper(prefixMapper);
+    }
+
+    @Bean
+    public ModifierGroupMapper modifierGroupMapper(ModifierMapper modifierMapper) {
+        return new ModifierGroupMapper(modifierMapper);
+    }
+
+    @Bean
+    public MenuItemMapper menuItemMapper() {
+        return new MenuItemMapper();
     }
 
     @Bean
@@ -115,6 +180,42 @@ public class Config {
             CategoryMapper categoryMapper,
             TransactionManager transactionManager) {
         return new CategoryService(categoryDao, restaurantDao, categoryMapper, transactionManager);
+    }
+
+    @Bean
+    public RestaurantService restaurantService(
+            Dao<Restaurant, String> restaurantDao,
+            Dao<Organization, String> organizationDao,
+            RestaurantMapper restaurantMapper,
+            TransactionManager transactionManager) {
+        return new RestaurantService(restaurantDao, organizationDao, restaurantMapper, transactionManager);
+    }
+
+
+
+    @Bean
+    public ModifierGroupService modifierGroupService(
+            Dao<ModifierGroup, String> modifierGroupDao,
+            ModifierGroupMapper modifierGroupMapper,
+            TransactionManager transactionManager) {
+        return new ModifierGroupService(modifierGroupDao, modifierGroupMapper, transactionManager);
+    }
+
+    @Bean
+    public ModifierService modifierService(
+            Dao<Modifier, String> modifierDao,
+            Dao<ModifierGroup, String> modifierGroupDao,
+            ModifierMapper modifierMapper,
+            TransactionManager transactionManager) {
+        return new ModifierService(modifierDao, modifierGroupDao, modifierMapper, transactionManager);
+    }
+
+    @Bean
+    public PrefixService prefixService(
+            Dao<Prefix, String> prefixDao,
+            PrefixMapper prefixMapper,
+            TransactionManager transactionManager) {
+        return new PrefixService(prefixDao, prefixMapper, transactionManager);
     }
 
 }

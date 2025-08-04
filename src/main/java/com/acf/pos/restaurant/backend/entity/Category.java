@@ -29,14 +29,11 @@ public class Category extends BaseEntity {
     private Integer displayOrder;
 
     @DatabaseField(columnName = "is_active")
-    private boolean isActive = true;
+    private boolean active = true;
 
     @DatabaseField(columnName = "color_code")
     private String colorCode;
 
     @DatabaseField(columnName = "icon_url")
     private String iconUrl;
-
-    @DatabaseField(columnName = "tax_applicable")
-    private boolean taxApplicable = true;
 }

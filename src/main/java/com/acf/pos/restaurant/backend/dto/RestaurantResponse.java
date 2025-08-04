@@ -14,7 +14,7 @@ public class RestaurantResponse {
     private String organizationId;
 
     @JsonProperty("unique_id")
-    private Integer uniqueId;
+    private String uniqueId;
 
     private String name;
 
