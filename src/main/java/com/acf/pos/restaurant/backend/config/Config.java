@@ -8,10 +8,15 @@ import com.acf.pos.restaurant.backend.entity.User;
 import com.acf.pos.restaurant.backend.entity.UserType;
 import com.acf.pos.restaurant.backend.entity.Shift;
 import com.acf.pos.restaurant.backend.entity.Terminal;
+import com.acf.pos.restaurant.backend.entity.Category;
+import com.acf.pos.restaurant.backend.entity.FloorPlan;
+import com.acf.pos.restaurant.backend.entity.RestaurantTable;
+import com.acf.pos.restaurant.backend.service.CategoryService;
+import com.acf.pos.restaurant.backend.mapper.CategoryMapper;
+import com.acf.pos.restaurant.backend.common.TransactionManager;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
-import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.support.ConnectionSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -39,9 +44,10 @@ public class Config {
     }
 
     @Bean
-    public TransactionManager transactionManager(ConnectionSource connectionSource) throws SQLException {
-        return new TransactionManager(connectionSource());
+    public com.j256.ormlite.misc.TransactionManager transactionManager(ConnectionSource connectionSource) throws SQLException {
+        return new com.j256.ormlite.misc.TransactionManager(connectionSource());
     }
+
     @Bean
     public Dao<RefreshToken, String> refreshTokenDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, RefreshToken.class);
@@ -80,6 +86,35 @@ public class Config {
     @Bean
     public Dao<Restaurant, String> restaurantDao(ConnectionSource connectionSource) throws SQLException {
         return DaoManager.createDao(connectionSource, Restaurant.class);
+    }
+
+    @Bean
+    public Dao<Category, String> categoryDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, Category.class);
+    }
+
+    @Bean
+    public Dao<FloorPlan, String> floorPlanDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, FloorPlan.class);
+    }
+
+    @Bean
+    public Dao<RestaurantTable, String> restaurantTableDao(ConnectionSource connectionSource) throws SQLException {
+        return DaoManager.createDao(connectionSource, RestaurantTable.class);
+    }
+
+    @Bean
+    public CategoryMapper categoryMapper() {
+        return new CategoryMapper();
+    }
+
+    @Bean
+    public CategoryService categoryService(
+            Dao<Category, String> categoryDao,
+            Dao<Restaurant, String> restaurantDao,
+            CategoryMapper categoryMapper,
+            TransactionManager transactionManager) {
+        return new CategoryService(categoryDao, restaurantDao, categoryMapper, transactionManager);
     }
 
 }

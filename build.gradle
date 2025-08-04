@@ -20,6 +20,7 @@ repositories {
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'com.j256.ormlite:ormlite-jdbc:6.1'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -28,6 +29,13 @@ dependencies {
 	implementation 'org.projectlombok:lombok:1.18.30'
 	annotationProcessor 'org.projectlombok:lombok:1.18.30'
 	implementation 'org.postgresql:postgresql:42.7.3'
+
+	// OpenAPI/Swagger Documentation
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+	
+	// Bean Validation API (for controller validation)
+	implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+	implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

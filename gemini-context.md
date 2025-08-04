@@ -26,7 +26,22 @@ The system is designed to be comprehensive, covering all major aspects of restau
 - **Synchronization:** All entities extend a `BaseEntity` that includes `createdAt`, `updatedAt`, `lastSyncTime`, `isDirty`, and `deleted` fields. These fields are explicitly mapped to their `snake_case` database column names using `@DatabaseField(columnName = "...")` to ensure correct ORM functionality.
 - **Lazy Loading:** Foreign key relationships are configured for lazy loading to optimize query performance.
 
-**Current Status (2025-08-03):**
+**Current Status (2025-08-04):**
 - **Focus:** We are in the initial stages of backend development, working component by component.
-- **Last Action:** We have started by examining the `Restaurant` entity, which corresponds to the "Restaurant Settings" feature in the backoffice.
-- **Next Step:** Proceed with generating the necessary backend components (Service, Repository, Controller) to manage the `Restaurant` entity.
+- **Last Action:** Completed comprehensive restaurant management and floor planning system:
+  - **Category Management:** Refactored to single `Category` entity with self-referencing parent-child relationships, eliminating redundant SubCategory
+  - **Restaurant Entity:** Enhanced with comprehensive fields (contact info, operating hours, service settings, feature flags)
+  - **Floor Planning System:** Complete drag-and-drop floor planning implementation:
+    - `FloorPlan` entity with canvas properties (dimensions, background, grid system)
+    - `RestaurantTable` entity with positioning, styling, and operational data
+    - `TableStyle` enum supporting 8 different table types (Square, Circle, Long Bar, Booth, etc.)
+    - Comprehensive DTOs for floor plan and table management
+    - Database schema updated with proper relationships and constraints
+- **Architecture:** Implemented portable service layer architecture:
+  - Framework-agnostic services (works on Android and Spring Boot)
+  - Custom logging, transaction, and validation interfaces
+  - Constructor injection pattern for maximum portability
+- **API Endpoints Created:**
+  - **Categories:** CRUD operations, hierarchical relationships, status management
+  - **Floor Planning:** Ready for drag-and-drop table layout management
+- **Next Step:** Implement FloorPlan and Table services/controllers, or move to Menu Items that will reference Categories.

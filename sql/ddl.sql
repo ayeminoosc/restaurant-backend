@@ -18,22 +18,39 @@ CREATE TABLE restaurant (
     is_dirty BOOLEAN DEFAULT false,
     deleted BOOLEAN DEFAULT false,
     organization_id VARCHAR(255) NOT NULL REFERENCES organization(id),
-    unique_id INTEGER,
-    name VARCHAR(255),
+    unique_id VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
     address_line1 VARCHAR(255),
     address_line2 VARCHAR(255),
     address_line3 VARCHAR(255),
+    city VARCHAR(255),
+    state VARCHAR(255),
     zip_code VARCHAR(255),
+    country VARCHAR(255),
     telephone VARCHAR(255),
+    email VARCHAR(255),
+    website VARCHAR(500),
     capacity INTEGER,
-    tables INTEGER,
-    cname VARCHAR(255),
-    csymbol VARCHAR(255),
-    sc_percentage DOUBLE PRECISION,
+
+    currency_name VARCHAR(255),
+    currency_symbol VARCHAR(10),
+    currency_code VARCHAR(3),
+    service_charge_percentage DOUBLE PRECISION,
     gratuity_percentage DOUBLE PRECISION,
-    ticket_footer VARCHAR(255),
-    price_includes_tax BOOLEAN,
-    allow_modifier_max_exceed BOOLEAN
+    tax_percentage DOUBLE PRECISION,
+    ticket_footer VARCHAR(500),
+    price_includes_tax BOOLEAN DEFAULT false,
+    allow_modifier_max_exceed BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
+    timezone VARCHAR(50),
+    opening_time VARCHAR(10),
+    closing_time VARCHAR(10),
+    logo_url VARCHAR(500),
+    cuisine_type VARCHAR(100),
+    delivery_enabled BOOLEAN DEFAULT false,
+    takeout_enabled BOOLEAN DEFAULT true,
+    reservation_enabled BOOLEAN DEFAULT false
 );
 
 DROP TABLE IF EXISTS subscription CASCADE;
@@ -126,4 +143,75 @@ CREATE TABLE user (
     shift_id VARCHAR(255) REFERENCES shift(id),
     current_terminal VARCHAR(255) REFERENCES terminal(id),
     n_user_type VARCHAR(255) REFERENCES user_type(id)
+);
+
+DROP TABLE IF EXISTS category CASCADE;
+CREATE TABLE category (
+    id VARCHAR(255) PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    last_sync_time TIMESTAMP,
+    is_dirty BOOLEAN DEFAULT false,
+    deleted BOOLEAN DEFAULT false,
+    restaurant_id VARCHAR(255) NOT NULL REFERENCES restaurant(id),
+    parent_category_id VARCHAR(255) REFERENCES category(id),
+    name VARCHAR(255) NOT NULL,
+    bilingual_name VARCHAR(255),
+    description TEXT,
+    display_order INTEGER,
+    is_active BOOLEAN DEFAULT true,
+    color_code VARCHAR(7),
+    icon_url VARCHAR(500),
+    tax_applicable BOOLEAN DEFAULT true
+);
+
+DROP TABLE IF EXISTS floor_plan CASCADE;
+CREATE TABLE floor_plan (
+    id VARCHAR(255) PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    last_sync_time TIMESTAMP,
+    is_dirty BOOLEAN DEFAULT false,
+    deleted BOOLEAN DEFAULT false,
+    restaurant_id VARCHAR(255) NOT NULL REFERENCES restaurant(id),
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    width_pixels INTEGER,
+    height_pixels INTEGER,
+    background_color VARCHAR(7),
+    background_image_url VARCHAR(500),
+    grid_size INTEGER DEFAULT 20,
+    is_active BOOLEAN DEFAULT true,
+    is_default BOOLEAN DEFAULT false,
+    display_order INTEGER
+);
+
+DROP TABLE IF EXISTS restaurant_table CASCADE;
+CREATE TABLE restaurant_table (
+    id VARCHAR(255) PRIMARY KEY,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    last_sync_time TIMESTAMP,
+    is_dirty BOOLEAN DEFAULT false,
+    deleted BOOLEAN DEFAULT false,
+    restaurant_id VARCHAR(255) NOT NULL REFERENCES restaurant(id),
+    floor_plan_id VARCHAR(255) NOT NULL REFERENCES floor_plan(id),
+    table_number VARCHAR(50) NOT NULL,
+    table_name VARCHAR(255),
+    table_style VARCHAR(50) NOT NULL,
+    x_position INTEGER NOT NULL,
+    y_position INTEGER NOT NULL,
+    width_pixels INTEGER,
+    height_pixels INTEGER,
+    rotation_degrees INTEGER DEFAULT 0,
+    capacity INTEGER,
+    min_capacity INTEGER,
+    max_capacity INTEGER,
+    is_active BOOLEAN DEFAULT true,
+    is_reservable BOOLEAN DEFAULT true,
+    color_code VARCHAR(7),
+    notes TEXT,
+    section_name VARCHAR(255),
+    server_station VARCHAR(255),
+    UNIQUE(restaurant_id, table_number)
 );
